@@ -273,6 +273,7 @@ void destroi(ppLDSE pp)
    (*pp)=NULL;
 }
 
+// funcao para requisito 1 do trabalho
 void mostra_lista(pLDSE p, void (*mostra_info)(void *))
 {
     pNoLDSE aux = p->lista;
@@ -286,3 +287,12 @@ void mostra_lista(pLDSE p, void (*mostra_info)(void *))
     }
 }
 
+// funcao para requisito 2 do trabalho
+void buscaPalavra(char temp[99]){
+    pLDSE pListaVertical;
+    pLDSE pListaHorizontal;
+    
+
+
+
+}
