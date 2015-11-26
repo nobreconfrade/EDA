@@ -288,7 +288,7 @@ void mostra_lista(pLDSE p, void (*mostra_info)(void *))
 }
 
 // funcao para requisito 2 do trabalho
-void buscaPalavra(char temp[99]){
+void buscaPalavra(){
     pLDSE pListaVertical;
     pLDSE pListaHorizontal;
     
