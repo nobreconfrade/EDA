@@ -8,6 +8,8 @@
 
 void mostra_struct(void *info);
 
+void buscaPalavra();
+
 void listaTexto();
 
 int main()
@@ -18,7 +20,7 @@ int main()
     {
         printf("> EDA\n");
         printf("1. Lista com frases do arquivo.\n"
-			   "2. \n"
+			   "2. Busca uma palavra no arquivo\n"
                "0. Sair.\n");
         scanf("%d", &opcao);
         switch(opcao)
@@ -26,6 +28,8 @@ int main()
         case 1:
             listaTexto();
             break;
+        case 2:
+            buscaPalavra();
         default:
             break;
         }
@@ -38,7 +42,6 @@ void listaTexto()
 {
     char buffer[2000], temp[99];
     int offset;    
-	// int nVertices = 0;
     int i;
     int x=0,y=0;
 
@@ -66,7 +69,7 @@ void listaTexto()
             fgets(buffer, sizeof(buffer), arquivo); // Le as palavras na linha e guarda na string
             char *pBuffer = buffer; // Ponteiro para o buffer, para poder mover o ponteiro na hora de ler as palavras
             while (sscanf(pBuffer,"%s%n", &temp, &offset) == 1){ // Le palavra por palavra ate chegar ao final da linha
-                printf("%s %d\n", temp, offset);
+                // printf("%s %d\n", temp, offset);
                 c.x=x;
                 c.y=y;
                 pBuffer += offset; // Aponta o ponteiro para a proxima palavra
@@ -89,8 +92,16 @@ void listaTexto()
         printf("\n");
     }
 }
+
 void mostra_struct(void *palavra)
 {
     Palavra *n = (Palavra*) palavra;
     printf(" %d,%d -> %s |", n->y,n->x,n->palavra);
+}
+
+void buscaPalavra(){
+    char temp[99];
+    printf("Escolha uma palavra\n");
+    scanf("%s",temp)
+    
 }
