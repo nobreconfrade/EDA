@@ -37,8 +37,8 @@ int main()
 void listaTexto()
 {
     char buffer[2000], temp[99];
-    int  vertAtual, offset;    
-	int nVertices = 0;
+    int offset;    
+	// int nVertices = 0;
     int i;
     int x=0,y=0;
 
@@ -63,24 +63,22 @@ void listaTexto()
             pLDSE pL;
             cria(&pL, sizeof(Palavra));
             
-			//fscanf(arquivo, "%s ", &vertAtual); // Ler o vertice a ser analisado. Numero antes do ":" no arquivo
             fgets(buffer, sizeof(buffer), arquivo); // Le as palavras na linha e guarda na string
-            //sscanf(buffer, "%s", &temp);
             char *pBuffer = buffer; // Ponteiro para o buffer, para poder mover o ponteiro na hora de ler as palavras
-            // printf("hue%s\n", pbuffer);
-            while (sscanf(pBuffer, "%s%n", &temp, &offset) == 1){ // Le palavra por palavra ate chegar ao final da linha
+            while (sscanf(pBuffer,"%s%n", &temp, &offset) == 1){ // Le palavra por palavra ate chegar ao final da linha
                 printf("%s %d\n", temp, offset);
-                // getchar();getchar();
                 c.x=x;
                 c.y=y;
-                pBuffer += offset; // Aponta o ponteiro para o proximo numero
-                //c.palavra=temp;
+                pBuffer += offset; // Aponta o ponteiro para a proxima palavra
+                if(x==0)
+                    x+= offset+1;
+                else
+                    x+= offset;
                 strcpy(c.palavra,temp);
-                // printf("%s\n", c.palavra);
                 insereNoFim(pL, &c);
-                x+= offset;
+                
             }
-            insereNoFim(pListaTexto, &pL);//insere na lista "principal" a sub-lista, que são os vertices "filhos"
+            insereNoFim(pListaTexto, &pL);//indexa pL na lista vertical 
         }
     }
     for (i = 0; i < y; i++)
@@ -88,11 +86,11 @@ void listaTexto()
         pLDSE pL=NULL;
         buscaNaPosLog(pListaTexto, &pL, i+1);
         mostra_lista(pL, mostra_struct);
-        printf("-\n");
+        printf("\n");
     }
 }
 void mostra_struct(void *palavra)
 {
     Palavra *n = (Palavra*) palavra;
-    printf("%d,%d -> %s ", n->y,n->x,n->palavra);
+    printf(" %d,%d -> %s |", n->y,n->x,n->palavra);
 }
