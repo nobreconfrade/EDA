@@ -8,19 +8,19 @@
 
 void mostra_struct(void *info);
 
-void chamaBuscaPalavra();
+void chamaBuscaPalavra(pLDSE pListaVertical,char *temp);
 
 void listaTexto(pLDSE pListaVertical, pLDSE pListaHorizontal);
 
-void carregaLista(pLDSE pListaVertical, pLDSE pListaHorizontal);
+void carregaLista(pLDSE pListaVertical);
 
 int main(){
-    int opcao;
+    int opcao,tamVertical;
     pLDSE pListaVertical;
-    pLDSE pListaHorizontal;
+    //pLDSE pListaHorizontal;
     
     do{
-        carregaLista(pListaVertical,pListaVertical);
+        tamVertical=carregaLista(pListaVertical);
         printf("> EDA\n");
         printf("1. Lista com frases do arquivo.\n"
 			   "2. Busca uma palavra no arquivo.\n"
@@ -32,7 +32,9 @@ int main(){
             listaTexto(pListaVertical,pListaHorizontal);
             break;
         case 2:
-            chamaBuscaPalavra();
+        	printf("Escolha uma palavra\n");
+   			scanf("%s",temp);
+            chamaBuscaPalavra(pListaVertical,temp);
         default:
             break;
         }
@@ -43,11 +45,16 @@ int main(){
 
 void listaTexto(pLDSE pListaVertical, pLDSE pListaHorizontal)
 {
-    while(pListaVertical != NULL){
-        pLDSE pListaHorizontal=NULL;
-        buscaNaPosLog(pListaVertical, &pListaHorizontal, i+1);
-        mostra_lista(pListaHorizontal, mostra_struct);
+	int i=0;    
+	while(pListaVertical != NULL){
+        pLDSE pL=NULL;
+        buscaNaPosLog(pListaVertical, &pL, i+1);
+        while(pL != NULL){
+		
+		}
+
         printf("\n");
+		i++;
     }
 }
 
@@ -57,18 +64,25 @@ void mostra_struct(void *palavra)
     printf(" %d,%d -> %s |", n->y,n->x,n->palavra);
 }
 
-void chamaBuscaPalavra(){
-    char temp[99];
-    printf("Escolha uma palavra\n");
-    scanf("%s",temp);
-    buscaPalavra();
+void chamaBuscaPalavra(pLDSE pListaVertical,char *temp){
+	int i,j;
+	Palavra c;    
+	pLDSE pListaHorizontal;
+    i=1;
+	while(buscaNaPosLog(pListaVertical,&pListaHorizontal,i++) != FRACASSO){
+		j=1;	
+		while(buscaNaPosLog(pListaHorizontal,&temp,j++) != FRACASSO){
+			if(strcmp(c.palavra,temp)==0)
+				printf("%d%d -> %s",c.x,c.y,c.palavra);
+		}
+	}
 }
 
-void carregaLista(pLDSE *pListaVertical, pLDSE *pListaHorizontal){
+void carregaLista(pLDSE pListaVertical){
     char buffer[2000], temp[99];
     int offset;    
     int x=0,y=0;
-
+	
     cria(&pListaVertical, sizeof(ppLDSE));
 
 
@@ -83,6 +97,7 @@ void carregaLista(pLDSE *pListaVertical, pLDSE *pListaHorizontal){
         while( !feof(arquivo)) // Enquanto nao chegar no final do texto
         {
             Palavra c;
+			pLDSE pListaHorizontal;
             y++;
             x=0;
             cria(&pListaHorizontal, sizeof(Palavra));
