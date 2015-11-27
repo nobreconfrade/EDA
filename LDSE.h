@@ -25,4 +25,3 @@ int removeDoFim(pLDSE p, void *reg);
 int removeDoInicio(pLDSE p, void *reg);
 
 void mostra_lista(pLDSE p, void (*mostra_info)(void *));
-void buscaPalavra();

@@ -286,13 +286,3 @@ void mostra_lista(pLDSE p, void (*mostra_info)(void *))
         aux = aux->prox;
     }
 }
-
-// funcao para requisito 2 do trabalho
-void buscaPalavra(){
-    pLDSE pListaVertical;
-    pLDSE pListaHorizontal;
-    
-
-
-
-}
