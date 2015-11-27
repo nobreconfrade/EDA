@@ -2,5 +2,5 @@
 
 typedef struct palavra{
 	int x,y;
-	char *palavra;
-}Info;
+	char palavra[99];
+}Palavra;

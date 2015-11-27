@@ -1,4 +1,4 @@
-//para compilar: gcc -Wall -o main main.c LDSE.c
+//para compilar: gcc -Wall -o main cliente.c LDSE.c
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,7 +6,7 @@
 #include "cliente.h"
 #include "LDSE.h"
 
-void mostra_inteiro(void *info);
+void mostra_struct(void *info);
 
 void listaTexto();
 
@@ -36,10 +36,11 @@ int main()
 
 void listaTexto()
 {
-    char buffer[2000], temp[200];
+    char buffer[2000], temp[99];
     int  vertAtual, offset;    
 	int nVertices = 0;
     int i;
+    int x=0,y=0;
 
     pLDSE pListaTexto;
 
@@ -53,37 +54,45 @@ void listaTexto()
     }
     else
     {
+        
         while( !feof(arquivo)) // Enquanto nao chegar no final do texto
         {
-            Info c;
-			c.i++;
+            Palavra c;
+			y++;
+            x=0;
             pLDSE pL;
-            cria(&pL, sizeof(info));
+            cria(&pL, sizeof(Palavra));
             
 			//fscanf(arquivo, "%s ", &vertAtual); // Ler o vertice a ser analisado. Numero antes do ":" no arquivo
             fgets(buffer, sizeof(buffer), arquivo); // Le as palavras na linha e guarda na string
             //sscanf(buffer, "%s", &temp);
-
             char *pBuffer = buffer; // Ponteiro para o buffer, para poder mover o ponteiro na hora de ler as palavras
-            while (sscanf(pBuffer, "%s%n", &temp, &offset)){ // Le palavra por palavra ate chegar ao final da linha
-				c.j+=sizeof(temp)/sizeof(char) + offset;
+            // printf("hue%s\n", pbuffer);
+            while (sscanf(pBuffer, "%s%n", &temp, &offset) == 1){ // Le palavra por palavra ate chegar ao final da linha
+                printf("%s %d\n", temp, offset);
+                // getchar();getchar();
+                c.x=x;
+                c.y=y;
                 pBuffer += offset; // Aponta o ponteiro para o proximo numero
-                insereNoFim(pL, &temp);
+                //c.palavra=temp;
+                strcpy(c.palavra,temp);
+                // printf("%s\n", c.palavra);
+                insereNoFim(pL, &c);
+                x+= offset;
             }
             insereNoFim(pListaTexto, &pL);//insere na lista "principal" a sub-lista, que são os vertices "filhos"
         }
     }
-    for (i = 0; i < nVertices-1; i++)
+    for (i = 0; i < y; i++)
     {
         pLDSE pL=NULL;
         buscaNaPosLog(pListaTexto, &pL, i+1);
-        printf("%d: ", i);
-        mostra_lista(pL, mostra_inteiro);
+        mostra_lista(pL, mostra_struct);
         printf("-\n");
     }
 }
-void mostra_inteiro(void *info)
+void mostra_struct(void *palavra)
 {
-    int *n = (int*) info;
-    printf("%d -> ", *n);
+    Palavra *n = (Palavra*) palavra;
+    printf("%d,%d -> %s ", n->y,n->x,n->palavra);
 }
