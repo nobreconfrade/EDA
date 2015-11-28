@@ -1,32 +1,35 @@
-//para compilar: gcc -Wall -o main cliente.c LDSE.c
+//para compilar: gcc -Wall -o main cliente.c LDDE.c
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "cliente.h"
-#include "LDSE.h"
+#include "LDDE.h"
 
-void buscaPalavra(pLDSE pListaVertical,char *temp);
+void buscaPalavra(pLDDE pListaVertical,char *temp);
 
-void listaTexto(pLDSE pListaVertical);
+void listaTexto(pLDDE pListaVertical);
 
-void carregaLista(pLDSE pListaVertical);
+void carregaLista(pLDDE pListaVertical);
 
-void contaTexto(pLDSE pListaVertical);
+void contaTexto(pLDDE pListaVertical);
+
+void excluiPalavra(pLDDE pListaVertical,int x,int y);
 
 int main(){
     system("clear");
-    int opcao;
+    int opcao,x,y;
     char temp[99];
-    pLDSE pListaVertical = NULL;
-    cria(&pListaVertical, sizeof(ppLDSE)); //cria lista vertical, a horizontal sera criada dentro do "carregaLista"
+    pLDDE pListaVertical = NULL;
+    cria(&pListaVertical, sizeof(ppLDDE)); //cria lista vertical, a horizontal sera criada dentro do "carregaLista"
     carregaLista(pListaVertical); //carrega as palavras do arquivo nas listas
     do{
         printf("> EDA - Trabalho final LISTA DE LISTAS\n");
         printf("1. Lista com palavras do arquivo.\n"
-                "2. Busca uma palavra no arquivo.\n"
-                "3. Conta quantas palavras o arquivo possui.\n"
-                "0. Sair.\n");
+               "2. Busca uma palavra no arquivo.\n"
+               "3. Conta quantas palavras o arquivo possui.\n"
+               "4. Remover palavra em coluna X e linha Y \n"
+               "0. Sair.\n");
         scanf("%d", &opcao);
         switch(opcao)
         {
@@ -41,6 +44,11 @@ int main(){
             case 3:
                 contaTexto(pListaVertical);
                 break;
+            case 4:
+                printf("Escolha a coluna e a linha, respectivamente\n");
+                scanf("%d %d",&x,&y);
+                excluiPalavra(pListaVertical,x,y);
+                break;
             default:
                 break;
         }
@@ -49,11 +57,11 @@ int main(){
     return 0;
 }
 
-void listaTexto(pLDSE pListaVertical)
+void listaTexto(pLDDE pListaVertical)
 {
     int i,j;
     Palavra c;    
-    pLDSE pListaHorizontal;
+    pLDDE pListaHorizontal;
     //printf("%p\n",pListaVertical);
     i=1;
     printf("---------------------------------------------------\n");
@@ -68,10 +76,10 @@ void listaTexto(pLDSE pListaVertical)
     printf("---------------------------------------------------\n");
 }
 
-void buscaPalavra(pLDSE pListaVertical,char *temp){
+void buscaPalavra(pLDDE pListaVertical,char *temp){
     int i,j;
     Palavra c;    
-    pLDSE pListaHorizontal;
+    pLDDE pListaHorizontal;
     i=1;
     printf("\n");
     while(buscaNaPosLog(pListaVertical,&pListaHorizontal,i++) != FRACASSO){
@@ -86,9 +94,9 @@ void buscaPalavra(pLDSE pListaVertical,char *temp){
     printf("\n");
 }
 
-void contaTexto(pLDSE pListaVertical){
+void contaTexto(pLDDE pListaVertical){
     int i,tam=0;    
-    pLDSE pListaHorizontal;
+    pLDDE pListaHorizontal;
     i=1;
     while(buscaNaPosLog(pListaVertical,&pListaHorizontal,i++) != FRACASSO){
         tam+=tamanho(pListaHorizontal); // utiliza funcao "tamanho" para contar palavras
@@ -99,7 +107,35 @@ void contaTexto(pLDSE pListaVertical){
 
 }
 
-void carregaLista(pLDSE pListaVertical){
+void excluiPalavra(pLDDE pListaVertical, int x,int y){   
+    pLDDE pListaHorizontal = NULL;
+    Palavra c,a;
+    int ret,j=1;
+    // printf("%p   x,y=%d %d\n", pListaHorizontal,x,y);
+    if(buscaNaPosLog(pListaVertical,&pListaHorizontal,y) != FRACASSO){
+        // printf("OLA -------- %p\n",pListaHorizontal);
+        while(buscaNaPosLog(pListaHorizontal,&c,j++) != FRACASSO){
+            // printf("HI\n");
+            if(c.x==x) 
+                ret=removeDaPosLog(pListaHorizontal, &a, j-1);
+        }       
+    }
+    else
+        printf("Valor de linha invalido!\n");
+
+    if(ret != FRACASSO){     
+        printf("\n");
+        printf("Sua palavra (%d %d -> %s) foi removida. \n", a.x,a.y,a.palavra);
+        printf("\n");
+    }
+    else{
+        printf("\n");
+        printf("Não foi possivel remover sua palavra.\n");
+        printf("\n");
+    }
+}
+
+void carregaLista(pLDDE pListaVertical){
     char buffer[2000], aux[99];
     int offset;    
     int x=0,y=0;
@@ -111,7 +147,7 @@ void carregaLista(pLDSE pListaVertical){
         while(!feof(arquivo)) // Enquanto nao chegar no final do texto
         {
             Palavra c;
-            pLDSE pListaHorizontal;
+            pLDDE pListaHorizontal;
             y++;
             x=0;
 

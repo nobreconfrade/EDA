@@ -1,9 +1,9 @@
-#include "LDSE_priv.h"
+#include "LDDE_priv.h"
 
 /*************** CRIA ***************/
-int cria(ppLDSE pp, int tamInfo)
+int cria(ppLDDE pp, int tamInfo)
 {   int ret = FRACASSO;
-	if(((*pp)=(pLDSE)malloc(sizeof(LDSE)))==NULL)
+	if(((*pp)=(pLDDE)malloc(sizeof(LDDE)))==NULL)
 		ret = FRACASSO;
 	else
 	{	(*pp)->lista=NULL;
@@ -14,10 +14,10 @@ int cria(ppLDSE pp, int tamInfo)
 }
 
 /*************** INSERE NO INICIO ***************/
-int insereNoInicio(pLDSE p, void *novo)
-{  pNoLDSE temp;
+int insereNoInicio(pLDDE p, void *novo)
+{  pNoLDDE temp;
    int ret = FRACASSO;
-   if((temp=(NoLDSE *)malloc(sizeof(NoLDSE)))!=NULL)
+   if((temp=(NoLDDE *)malloc(sizeof(NoLDDE)))!=NULL)
    { if((temp->dados = (void *) malloc(p->tamInfo)) !=NULL )
      {   memcpy(temp->dados,novo,p->tamInfo);
  		 temp->prox=p->lista;
@@ -31,10 +31,10 @@ int insereNoInicio(pLDSE p, void *novo)
 }
 
 /*************** INSERE NO FINAL ***************/
-int insereNoFim(pLDSE p, void *novo)
-{ 	pNoLDSE temp, aux;
+int insereNoFim(pLDDE p, void *novo)
+{ 	pNoLDDE temp, aux;
 	int ret = FRACASSO;
-	if((temp=(pNoLDSE)malloc(sizeof(NoLDSE)))!= NULL)
+	if((temp=(pNoLDDE)malloc(sizeof(NoLDDE)))!= NULL)
 	{ if((temp->dados = (void *) malloc(p->tamInfo))!=NULL)
 	     {   memcpy(temp->dados,novo,p->tamInfo);
         	 temp->prox = NULL;
@@ -58,12 +58,12 @@ int insereNoFim(pLDSE p, void *novo)
 }
 
 /*************** INSERE NA POSIÇÃO LÓGICA ***************/
-int insereNaPosLog (pLDSE p, void *novo, unsigned int posLog)
-{ pNoLDSE temp, pre,pos;
+int insereNaPosLog (pLDDE p, void *novo, unsigned int posLog)
+{ pNoLDDE temp, pre,pos;
   unsigned int cont=0, ret=FRACASSO;
   if( p->lista != NULL && posLog > 0)
   { cont = 1;
-    temp = (pNoLDSE) malloc(sizeof(NoLDSE));
+    temp = (pNoLDDE) malloc(sizeof(NoLDDE));
     if(temp!=NULL)
     {
       if((temp->dados = (void *) malloc(p->tamInfo))!=NULL)
@@ -105,9 +105,9 @@ int insereNaPosLog (pLDSE p, void *novo, unsigned int posLog)
 }
 
 /*************** REMOVE DO INICIO ***************/
-int removeDoInicio(pLDSE p, void *reg)
+int removeDoInicio(pLDDE p, void *reg)
 {  	int ret = FRACASSO;
-	pNoLDSE aux=NULL;
+	pNoLDDE aux=NULL;
 	if(p->lista != NULL)
 	{  	memcpy(reg,p->lista->dados,p->tamInfo);
       		free(p->lista->dados);
@@ -121,9 +121,9 @@ int removeDoInicio(pLDSE p, void *reg)
 
 
 /*************** REMOVE DO FINAL ***************/
-int removeDoFim(pLDSE p, void *reg)
+int removeDoFim(pLDDE p, void *reg)
 {
-	pNoLDSE aux, pre;
+	pNoLDDE aux, pre;
 	int ret = FRACASSO;
 	if(p->lista != NULL)
 	{	pre=p->lista;
@@ -151,8 +151,8 @@ int removeDoFim(pLDSE p, void *reg)
 }
 
 /*************** REMOVE DA POSIÇÃO LÓGICA ***************/
-int removeDaPosLog(pLDSE p, void *reg, unsigned int posLog)
-{  pNoLDSE pos=NULL,pre=NULL;
+int removeDaPosLog(pLDDE p, void *reg, unsigned int posLog)
+{  pNoLDDE pos=NULL,pre=NULL;
    unsigned int cont=0, ret = FRACASSO;
    if( p->lista != NULL && posLog > 0)
    { cont = 1;
@@ -186,7 +186,7 @@ int removeDaPosLog(pLDSE p, void *reg, unsigned int posLog)
 
 
 /*************** BUSCA NO INICIO ***************/
-int buscaNoInicio(pLDSE p, void *reg)
+int buscaNoInicio(pLDDE p, void *reg)
 {  int ret = FRACASSO;
    if(p->lista != NULL)
 	{ memcpy(reg,p->lista->dados,p->tamInfo);
@@ -197,8 +197,8 @@ int buscaNoInicio(pLDSE p, void *reg)
 
 
 /*************** BUSCA NO FINAL ***************/
-int buscaNoFim(pLDSE p, void *reg)
-{	pNoLDSE aux;
+int buscaNoFim(pLDDE p, void *reg)
+{	pNoLDDE aux;
 	int ret = FRACASSO;
 	if(p->lista != NULL)
 	{ aux=p->lista;
@@ -212,9 +212,9 @@ int buscaNoFim(pLDSE p, void *reg)
 }
 
 /*************** BUSCA NA POSIÇÃO LÓGICA ***************/
-int buscaNaPosLog(pLDSE p, void *reg, unsigned int posLog)
+int buscaNaPosLog(pLDDE p, void *reg, unsigned int posLog)
 {	int cont, ret = FRACASSO;
-	pNoLDSE pos;
+	pNoLDDE pos;
 	if(p->lista != NULL && posLog > 0)
 	{	cont = 1;
 		pos = p->lista;
@@ -232,9 +232,9 @@ int buscaNaPosLog(pLDSE p, void *reg, unsigned int posLog)
 }
 
 /*************** TAMANHO ***************/
-int tamanho(pLDSE p)
+int tamanho(pLDDE p)
 { int tam=0;
-  pNoLDSE aux;
+  pNoLDDE aux;
   aux=p->lista;
   if(aux==NULL)
     tam=0;
@@ -248,8 +248,8 @@ int tamanho(pLDSE p)
 }
 
 /*************** PURGA ***************/
-void reinicia(pLDSE p)
-{	pNoLDSE aux=NULL;	
+void reinicia(pLDDE p)
+{	pNoLDDE aux=NULL;	
 	if(p->lista != NULL)
 	{	aux=p->lista->prox;
 		while(aux != NULL)
@@ -266,7 +266,7 @@ void reinicia(pLDSE p)
 }
 
 /*************** DESTROI ***************/
-void destroi(ppLDSE pp)
+void destroi(ppLDDE pp)
 {
 	reinicia(*pp);
 	free(*pp);
