@@ -272,17 +272,3 @@ void destroi(ppLDSE pp)
 	free(*pp);
    (*pp)=NULL;
 }
-
-// funcao para requisito 1 do trabalho
-void mostra_lista(pLDSE p, void (*mostra_info)(void *))
-{
-    pNoLDSE aux = p->lista;
-    if (aux == NULL)
-        return;
-
-    while(aux != NULL)
-    {
-        mostra_info(aux->dados);
-        aux = aux->prox;
-    }
-}
