@@ -272,3 +272,21 @@ void destroi(ppLDDE pp)
 	free(*pp);
    (*pp)=NULL;
 }
+/************** EDITA *****************/
+int editaNaPosLog(pLDDE p, void *reg, unsigned int posLog)
+{ int cont, ret = FRACASSO;
+  pNoLDDE pos;
+  if(p->lista != NULL && posLog > 0)
+  { cont = 1;
+    pos = p->lista;
+    while(cont < posLog && pos->prox != NULL ){
+      pos = pos->prox;
+      cont++;
+    }
+    if(cont == posLog){
+      memcpy(pos->dados,reg,p->tamInfo);
+      ret = SUCESSO;
+    }
+  }
+  return ret;
+}

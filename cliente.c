@@ -16,6 +16,8 @@ void contaTexto(pLDDE pListaVertical);
 
 void excluiPalavra(pLDDE pListaVertical,int x,int y);
 
+void editaPalavra(pLDDE pListaVertical,int x, int y,char *temp);
+
 int main(){
     system("clear");
     int opcao,x,y;
@@ -28,7 +30,8 @@ int main(){
         printf("1. Lista com palavras do arquivo.\n"
                "2. Busca uma palavra no arquivo.\n"
                "3. Conta quantas palavras o arquivo possui.\n"
-               "4. Remover palavra em coluna X e linha Y \n"
+               "4. Remover palavra em coluna X e linha Y. \n"
+               "5. Edita uma palavra em coluna X e linha Y. \n"
                "0. Sair.\n");
         scanf("%d", &opcao);
         switch(opcao)
@@ -48,6 +51,11 @@ int main(){
                 printf("Escolha a coluna e a linha, respectivamente\n");
                 scanf("%d %d",&x,&y);
                 excluiPalavra(pListaVertical,x,y);
+                break;
+            case 5:
+                printf("Escolha a coluna e a linha e a nova palavra, respectivamente\n");
+                scanf("%d %d %s",&x,&y,temp);
+                editaPalavra(pListaVertical,x,y,temp);
                 break;
             default:
                 break;
@@ -131,6 +139,37 @@ void excluiPalavra(pLDDE pListaVertical, int x,int y){
     else{
         printf("\n");
         printf("Não foi possivel remover sua palavra.\n");
+        printf("\n");
+    }
+}
+
+void editaPalavra(pLDDE pListaVertical,int x, int y,char *temp){
+    pLDDE pListaHorizontal = NULL;
+    Palavra c,a;
+    c.x=x;
+    c.y=y;
+    strcpy(c.palavra,temp);
+    int ret,j=1;
+    // printf("%s   x,y=%d %d\n", c.palavra,c.x,c.y);
+    if(buscaNaPosLog(pListaVertical,&pListaHorizontal,y) != FRACASSO){
+        // printf("OLA -------- %p\n",pListaHorizontal);
+        while(buscaNaPosLog(pListaHorizontal,&a,j++) != FRACASSO){
+            // printf("HI\n");
+            if(a.x==x) 
+                ret=editaNaPosLog(pListaHorizontal, &c, j-1);
+        }       
+    }
+    else
+        printf("Valor de linha invalido!\n");
+
+    if(ret != FRACASSO){     
+        printf("\n");
+        printf("Sua palavra (%d %d -> %s) foi inserida na lista. \n", c.x,c.y,c.palavra);
+        printf("\n");
+    }
+    else{
+        printf("\n");
+        printf("Não foi possivel editar sua palavra.\n");
         printf("\n");
     }
 }

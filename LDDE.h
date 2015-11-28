@@ -23,5 +23,4 @@ int buscaNoInicio(pLDDE p, void *reg);
 int removeDaPosLog(pLDDE p, void *reg, unsigned  int posLog);
 int removeDoFim(pLDDE p, void *reg);
 int removeDoInicio(pLDDE p, void *reg);
-
-void mostra_lista(pLDDE p, void (*mostra_info)(void *));
+int editaNaPosLog(pLDDE p, void *reg, unsigned int posLog);
