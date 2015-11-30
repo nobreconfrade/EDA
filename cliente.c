@@ -212,3 +212,12 @@ void carregaLista(pLDDE pListaVertical){
         }
     }
 }
+
+//FILE *arquiTEMP;
+//fopen("arquiTEMP.txt","w"); 
+//while(buscaNaPosLog(pListaHorizontal,&a,j++) != FRACASSO){
+//    fprintf(arquiTEMP, "%s ",c.palavra);
+//}
+//printf("\n");
+
+//rename()
