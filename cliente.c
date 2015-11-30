@@ -10,7 +10,7 @@ void buscaPalavra(pLDDE pListaVertical,char *temp);
 
 void listaTexto(pLDDE pListaVertical);
 
-void carregaLista(pLDDE pListaVertical);
+void carregaLista(pLDDE pListaVertical,int *oi);
 
 void contaTexto(pLDDE pListaVertical);
 
@@ -18,13 +18,16 @@ void excluiPalavra(pLDDE pListaVertical,int x,int y);
 
 void editaPalavra(pLDDE pListaVertical,int x, int y,char *temp);
 
+void manipulaArquivo(pLDDE pListaVertical,int *oi);
+
 int main(){
     system("clear");
-    int opcao,x,y;
+    int opcao,x,y,oi=0;
     char temp[99];
     pLDDE pListaVertical = NULL;
     cria(&pListaVertical, sizeof(ppLDDE)); //cria lista vertical, a horizontal sera criada dentro do "carregaLista"
-    carregaLista(pListaVertical); //carrega as palavras do arquivo nas listas
+    carregaLista(pListaVertical,&oi); //carrega as palavras do arquivo nas listas
+    manipulaArquivo(pListaVertical,&oi);
     do{
         printf("> EDA - Trabalho final LISTA DE LISTAS\n");
         printf("1. Lista com palavras do arquivo.\n"
@@ -48,20 +51,23 @@ int main(){
                 contaTexto(pListaVertical);
                 break;
             case 4:
-                printf("Escolha a coluna e a linha, respectivamente\n");
+                printf("Escolha a coluna X e a linha Y, respectivamente\n");
                 scanf("%d %d",&x,&y);
                 excluiPalavra(pListaVertical,x,y);
+                manipulaArquivo(pListaVertical,&oi);
                 break;
             case 5:
-                printf("Escolha a coluna e a linha e a nova palavra, respectivamente\n");
+                printf("Escolha a coluna X e a linha Y e a nova palavra, respectivamente\n");
                 scanf("%d %d %s",&x,&y,temp);
                 editaPalavra(pListaVertical,x,y,temp);
+                manipulaArquivo(pListaVertical,&oi);
                 break;
             default:
                 break;
         }
     }while(opcao != 0);
-
+    rename("arquivo.txt","arquivoOLD.txt");
+    rename("arqTemp.txt","arquivo.txt");
     return 0;
 }
 
@@ -69,7 +75,7 @@ void listaTexto(pLDDE pListaVertical)
 {
     int i,j;
     Palavra c;    
-    pLDDE pListaHorizontal;
+    pLDDE pListaHorizontal = NULL;
     //printf("%p\n",pListaVertical);
     i=1;
     printf("---------------------------------------------------\n");
@@ -77,7 +83,7 @@ void listaTexto(pLDDE pListaVertical)
         // printf("Hello\n");
         j=1;	
         while(buscaNaPosLog(pListaHorizontal,&c,j++) != FRACASSO){ //vai procurar pela "pListaHorizontal" até encontrar "NULL" 
-            printf("%d %d -> %s |",c.y,c.x,c.palavra);
+            printf("%d %d -> %s |",c.x,c.y,c.palavra);
         }
         printf("\n");
     }
@@ -94,7 +100,7 @@ void buscaPalavra(pLDDE pListaVertical,char *temp){
         j=1;	
         while(buscaNaPosLog(pListaHorizontal,&c,j++) != FRACASSO){
             if(strcmp(c.palavra,temp)==0) // se o retorno de "strcmp" for igual a 0 indica sucesso e retorna a palavra
-                printf(" %d %d -> %s | \n",c.y,c.x,c.palavra);
+                printf(" %d %d -> %s | \n",c.x,c.y,c.palavra);
             
         }
         
@@ -174,7 +180,7 @@ void editaPalavra(pLDDE pListaVertical,int x, int y,char *temp){
     }
 }
 
-void carregaLista(pLDDE pListaVertical){
+void carregaLista(pLDDE pListaVertical,int *oi){
     char buffer[2000], aux[99];
     int offset;    
     int x=0,y=0;
@@ -198,6 +204,7 @@ void carregaLista(pLDDE pListaVertical){
                 //printf("%s %d\n", aux, offset);
                 c.x=x;
                 c.y=y;
+                *oi=y;
                 pBuffer += offset; // Aponta o ponteiro para a proxima palavra
                 if(x==0)
                     x+= offset+1;
@@ -211,13 +218,27 @@ void carregaLista(pLDDE pListaVertical){
             insereNoFim(pListaVertical, &pListaHorizontal);//indexa pListaHorizontal na lista vertical 
         }
     }
+    fclose(arquivo);
 }
 
-//FILE *arquiTEMP;
-//fopen("arquiTEMP.txt","w"); 
-//while(buscaNaPosLog(pListaHorizontal,&a,j++) != FRACASSO){
-//    fprintf(arquiTEMP, "%s ",c.palavra);
-//}
-//printf("\n");
-
-//rename()
+void manipulaArquivo(pLDDE pListaVertical, int *oi){
+    FILE *arqTemp;
+    Palavra c;
+    pLDDE pListaHorizontal;
+    int i=1,j;
+    arqTemp=fopen("arqTemp.txt","w"); 
+    while(buscaNaPosLog(pListaVertical,&pListaHorizontal,i++) != FRACASSO){ 
+        // if (i<=*oi){
+            //printf("%d  Hello\n",i);    
+            j=1;
+            while(buscaNaPosLog(pListaHorizontal,&c,j++) != FRACASSO){ 
+                // printf(" - %d - ",j);
+                fprintf(arqTemp,"%s ",c.palavra);                   
+                    
+            }
+            if (i<=*oi)
+                fprintf(arqTemp,"\r\n");
+        // }
+    }
+    fclose(arqTemp);
+}
